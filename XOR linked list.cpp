@@ -57,11 +57,9 @@ void printlist(node *head){
         cout << "Empty" << endl;
         return;
     }
-    while(1){
+    while(head != nullptr){
         cout << head->data << " ";
         temp2 = head;
-        if(temp1 == head->npx)
-            break;
         head = XOR(temp1, head->npx);
         temp1 = temp2;
     }
