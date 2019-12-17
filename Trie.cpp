@@ -2,6 +2,9 @@
 Trie is an efficient information retrieval data structure.
 Use this data structure to store Strings and search strings.
 Your task is to use TRIE data structure and search the given string A. If found print 1 else 0.
+1
+10
+the a there answer any by bye their hero heroplane
 */
 #include<bits/stdc++.h>
 using namespace std;
@@ -13,7 +16,9 @@ struct node{
 
 node* getNode();
 void insertString(node**, string);
-void searchString(node*, string);
+int searchString(node*, string);
+void deleteString(node*, string);
+node* _deleteString(node*, string, int);
 
 void Trie(int);
 
@@ -24,7 +29,6 @@ int main(){
 	while(t--){
 	    cin >> n;
 	    Trie(n);
-	    cout << endl;
 	}
 	return 0;
 }
@@ -35,10 +39,26 @@ void Trie(int n){
 
     for(int i = 0; i < n; i++)
         cin >> arr[i];
-    cin >> res;
     for(int i = 0; i < n; i++)
         insertString(&root, arr[i]);
-    searchString(root, res);
+    while(1){
+        int a;
+        string str;
+        cin >> a;
+
+        switch(a){
+            case 1: cin >> str;
+                    deleteString(root, str);
+                    break;
+            case 2: cin >> str;
+                    if(searchString(root, str))
+                        cout << "Yes" << endl;
+                    else
+                        cout << "No" << endl;
+                    break;
+            default: return;
+        }
+    }
 }
 
 node* getNode(){
@@ -64,20 +84,60 @@ void insertString(node **root, string str){
     temp->isEnd = true;
 }
 
-void searchString(node *root, string str){
+int searchString(node *root, string str){
     if(root == nullptr){
-        cout << 0;
-        return;
+        return 0;
     }
     for(int i = 0; i < str.length(); i++){
         if(root->om.find(str[i]) == root->om.end()){
-            cout << 0;
-            return;
+            return 0;
         }
         root = root->om[str[i]];
     }
     if(root->isEnd == true)
-        cout << 1;
+        return 1;
     else
-        cout << 0;
+        return 0;
+}
+
+void deleteString(node *root, string str){
+    int i = 0;
+
+    if(!searchString(root, str)){
+        cout << "No" << endl;
+        return;
+    }
+    _deleteString(root, str, i);
+}
+
+node* _deleteString(node *root, string str, int index){
+    if(index == str.length()){
+        root->isEnd = false;
+        if(root->om.empty()){
+            return nullptr;
+        }
+        else{
+            return root;
+        }
+    }
+    else{
+        char ch = str[index];
+        node *temp;
+
+        temp = _deleteString(root->om[ch], str, index + 1);
+        if(temp){
+            return root;
+        }
+        else{
+            root->om.erase(ch);
+            if(root->isEnd == true)
+                return root;
+            else{
+                if(root->om.empty())
+                    return nullptr;
+                else
+                    return root;
+            }
+        }
+    }
 }
