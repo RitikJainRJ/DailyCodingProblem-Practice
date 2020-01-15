@@ -4,6 +4,8 @@ using namespace std;
 int maxPlatform(int);
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     int t, n;
 
     cin >> t;
@@ -15,31 +17,39 @@ int main(){
 }
 
 int maxPlatform(int n){
-    multimap<int, int> om;
-    multimap<int, int>::iterator it, it2;
     int arr[n], dep[n], count = 0;
+    pair<int, int> sol[n];
+    bool visited[n];
 
+    memset(visited, false, sizeof(visited));
     for(int i = 0; i < n; i++)
         cin >> arr[i];
     for(int i = 0; i < n; i++)
         cin >> dep[i];
     for(int i = 0; i < n; i++)
-        om.insert({arr[i], dep[i]});
-    while(!om.empty()){
-        count++;
-        it = om.begin();
-        int temp = it->first;
-        while(it != om.end()){
-            if(temp <= it->first){
-                temp = it->second;
-                it2 = it;
-                it2++;
-                om.erase(it);
-                it = it2;
+        sol[i] = {arr[i], dep[i]};
+    sort(sol, sol + n);
+    while(1){
+        int temp, i, flag = 0;
+        for(i = 0; i < n; i++)
+            if(visited[i] == false){
+                temp = sol[i].second;
+                visited[i] = true;
+                flag = 1;
+                break;
             }
-            else
-                it++;
+        for(; i < n; i++){
+            if(visited[i] == false){
+                if(temp < sol[i].first){
+                    temp = sol[i].second;
+                    visited[i] = true;
+                    flag = 1;
+                }
+            }
         }
+        if(flag == 0)
+            break;
+        count++;
     }
     return count;
 }
