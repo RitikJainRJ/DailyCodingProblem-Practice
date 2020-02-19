@@ -25,7 +25,7 @@ void printLIS_2(int n){
     load[0].push_back(arr[0]);
     for(int i = 1; i < n; i++){
         for(int j = 0; j < i; j++){
-            if(arr[j] < arr[i] && load[j].size() + 1 >= load[i].size() + 1)
+            if(arr[j] < arr[i] && load[j].size() + 1 > load[i].size() + 1)
                 load[i] = load[j];
         }
         load[i].push_back(arr[i]);
